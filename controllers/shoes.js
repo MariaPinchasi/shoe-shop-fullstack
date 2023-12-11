@@ -40,7 +40,10 @@ exports.createShoe = asyncHandler(async (req, res, next) => {
 // @route     PUT /api/v1/shoe/:id
 // @access    Private
 exports.updateShoe = asyncHandler(async (req, res, next) => {
-    const shoe = await Shoe.findByIdAndUpdate(req.params.id, req.body);
+    const shoe = await Shoe.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+        runValidators: true
+    });
 
     if (!shoe) {
         return next(
