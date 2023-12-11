@@ -20,7 +20,7 @@ const useForm = (shoe, setShoe, setErrors, apiFunction) => {
         let isValid = true;
         const imgRegex = /(https?:\/\/.*\.(?:png|jpg|jpeg))/;
         const newErrors = {};
-        if (shoe.name.length < 2) {
+        if (shoe.name.length < 3) {
             newErrors.name = "name must bo at least 3 characters long";
             isValid = false;
         }
