@@ -5,7 +5,6 @@ import { useGlobalShoesContext } from "../hooks/useGlobalShoesContext.js";
 const Home = () => {
 
     const { shoes, isLoading } = useGlobalShoesContext();
-
     if (isLoading) {
         return <div className='loading'>Loading...</div>
     }

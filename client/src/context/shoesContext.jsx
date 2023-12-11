@@ -50,6 +50,7 @@ export const AppShoesProvider = ({ children }) => {
     return (
         <AppShoesContext.Provider
             value={{
+                isLoading,
                 shoes,
                 shoe,
                 fetchShoes,

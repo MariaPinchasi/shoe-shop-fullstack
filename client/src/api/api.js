@@ -6,12 +6,12 @@ const URL = `${BASE_URL}/api/v1`;
 
 
 export const getAllShoes = async () => {
-    try {
-        const res = await axios.get(`${URL}/shoes`);
-        return res.data.data;
-    } catch (err) {
-        handleError(err, 'Error while getting the shoes');
-    }
+    // try {
+    const res = await axios.get(`${URL}/shoes`);
+    return res.data.data;
+    // } catch (err) {
+    //     handleError(err, 'Error while getting the shoes');
+    // }
 }
 
 export const getShoe = async (shoeId) => {
