@@ -2,7 +2,7 @@ import axios from "axios";
 import { handleError, showToast } from "../utils";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
-const URL = `${BASE_URL}api/v1`;
+const URL = `${BASE_URL}/api/v1`;
 
 
 export const getAllShoes = async () => {
