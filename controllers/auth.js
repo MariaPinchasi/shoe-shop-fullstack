@@ -79,20 +79,17 @@ exports.getUser = asyncHandler(async (req, res, next) => {
 const sendTokenResponse = (user, statusCode, res) => {
     // Create token
     const token = user.getSignedJwtToken();
-    console.log(token);
+
     const options = {
         expires: new Date(
             Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000,
         ),
         httpOnly: true,
-        secure: true,
-        sameSite: 'None'
     };
 
     if (process.env.NODE_ENV === 'production') {
-        console.log("cookie in production");
-        // options.secure = true;
-        // options.sameSite = 'None';
+        options.secure = true;
+        options.sameSite = 'None';
     }
     // it's up to the client side how to handle the token
     res.status(statusCode).cookie('token', token, options).json({
