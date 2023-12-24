@@ -1,7 +1,20 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router'
 
-const useForm = (shoe, setShoe, setErrors, apiFunction) => {
+const useForm = (apiFunction) => {
     const navigate = useNavigate();
+    const [shoe, setShoe] = useState({
+        name: '',
+        brand: '',
+        image: '',
+        price: '',
+    });
+    const [errors, setErrors] = useState({
+        name: null,
+        brand: null,
+        image: null,
+        price: null
+    });
 
     const handleChange = (e) => {
         setShoe({
@@ -14,7 +27,40 @@ const useForm = (shoe, setShoe, setErrors, apiFunction) => {
                 [e.target.name]: null
             }));
     };
-
+    const formData = [
+        {
+            id: '1',
+            label: 'Name',
+            type: 'text',
+            name: 'name',
+            value: shoe.name,
+            error: errors.name,
+        },
+        {
+            id: '2',
+            label: 'brand',
+            type: 'text',
+            name: 'brand',
+            value: shoe.brand,
+            error: errors.brand,
+        },
+        {
+            id: '3',
+            label: 'Image',
+            type: 'text',
+            name: 'image',
+            value: shoe.image,
+            error: errors.image,
+        },
+        {
+            id: '4',
+            label: 'price',
+            type: 'number',
+            name: 'price',
+            value: shoe.price,
+            error: errors.price,
+        },
+    ]
     const handleSubmit = (e) => {
         e.preventDefault();
         let isValid = true;
@@ -42,7 +88,7 @@ const useForm = (shoe, setShoe, setErrors, apiFunction) => {
             navigate('/');
         }
     };
-    return { handleChange, handleSubmit }
+    return { handleChange, handleSubmit, formData, setShoe }
 }
 
 export default useForm

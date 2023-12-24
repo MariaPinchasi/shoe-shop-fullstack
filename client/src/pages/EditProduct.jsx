@@ -3,39 +3,31 @@ import { useParams } from 'react-router'
 import Form from '../components/Form';
 import useForm from '../hooks/useForm';
 import { useGlobalShoesContext } from '../hooks/useGlobalShoesContext';
+import { handleError } from '../utils';
 
 const EditProduct = () => {
     const { shoeId } = useParams();
     const { getShoe, handleShoeEdit } = useGlobalShoesContext();
-
-    const [shoe, setShoe] = useState({
-        name: '',
-        brand: '',
-        image: '',
-        price: '',
-    });
-    const [errors, setErrors] = useState({
-        name: null,
-        brand: null,
-        image: null,
-        price: null
-    });
+    const { handleChange, handleSubmit, formData, setShoe } = useForm(handleShoeEdit)
 
     const fetchShoe = async () => {
-        const shoeData = await getShoe(shoeId);
-        setShoe(shoeData);
+        try {
+            const shoeData = await getShoe(shoeId);
+            setShoe(shoeData);
+        } catch (err) {
+            handleError(err, `Error while getting the shoe with id ${shoeId}`);
+        }
     }
 
     useEffect(() => {
         fetchShoe();
     }, []);
 
-    const { handleChange, handleSubmit } = useForm(shoe, setShoe, setErrors, handleShoeEdit)
 
     return (
         <div className="single-shoe-container">
             <h2>Edit Product</h2>
-            <Form handleChange={handleChange} handleSubmit={handleSubmit} shoe={shoe} errors={errors} btnText='Update' />
+            <Form handleChange={handleChange} handleSubmit={handleSubmit} btnText='Update' formData={formData} />
         </div>)
 }
 

@@ -1,33 +1,60 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
+import { getUser, loginUser, logoutUser, registerUser } from "../api/api";
+import { handleError, showToast } from "../utils/index.js";
 
 export const AppUserContext = createContext();
 
-const userFromLocalStorage = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')) : null;
-
 export const AppUserProvider = ({ children }) => {
-    const [user, setUser] = useState(userFromLocalStorage);
+    const [user, setUser] = useState();
 
-    const login = (formData) => {
-        let isAdmin = false;
-        if (formData.name === 'admin') {
-            isAdmin = true;
+    const loadUser = async () => {
+        try {
+            const userData = await getUser();
+            setUser(userData);
+        } catch (err) {
+            // handleError(err, 'Error related to user details or permissions');
+            setUser(null);
         }
-        const userData = { name: formData.name, isAdmin };
-        localStorage.setItem('userData', JSON.stringify(userData))
-        setUser(userData);
-    }
+    };
 
-    const logout = () => {
-        localStorage.removeItem('userData')
-        setUser(null)
-    }
+    useEffect(() => {
+        loadUser();
+    }, []);
+
+    const login = async (email, password) => {
+        try {
+            const userData = await loginUser(email, password);
+            setUser(userData);
+        } catch (err) {
+            handleError(err, 'Error related to user login');
+        }
+    };
+
+    const register = async (formData) => {
+        try {
+            const userData = await registerUser(formData);
+            setUser(userData);
+        } catch (err) {
+            handleError(err, 'Error related to user registration');
+        }
+    };
+
+    const logout = async () => {
+        try {
+            await logoutUser();
+            setUser(null);
+        } catch (err) {
+            handleError(err, 'Error related to user logout');
+        }
+    };
 
     return (
         <AppUserContext.Provider
             value={{
                 user,
                 login,
-                logout,
+                register,
+                logout
             }}>
             {children}
         </AppUserContext.Provider>

@@ -1,53 +1,52 @@
 import axios from "axios";
-import { handleError, showToast } from "../utils";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const URL = `${BASE_URL}/api/v1`;
-
+const API = axios.create({
+    URL,
+    withCredentials: true
+});
 
 export const getAllShoes = async () => {
-    // try {
-    const res = await axios.get(`${URL}/shoes`);
+    const res = await API.get(`${URL}/shoes`);
     return res.data.data;
-    // } catch (err) {
-    //     handleError(err, 'Error while getting the shoes');
-    // }
 }
 
 export const getShoe = async (shoeId) => {
-    try {
-        const res = await axios.get(
-            `${URL}/shoes/${shoeId}`
-        );
-        return res.data.data;
-    } catch (err) {
-        handleError(err, `Error while getting the shoe with id ${shoeId}`);
-    }
+    const res = await API.get(`${URL}/shoes/${shoeId}`);
+    return res.data.data;
 }
 
 export const updateShoe = async (shoe, shoeId) => {
-    try {
-        await axios.put(`${URL}/shoes/${shoeId}`, shoe);
-        showToast('Shoe successfully updated');
-    } catch (err) {
-        handleError(err, "Error while updating the shoe");
-    }
+    await API.put(`${URL}/shoes/${shoeId}`, shoe);
 }
 
 export const createShoe = async (shoe) => {
-    try {
-        await axios.post(`${URL}/shoes`, shoe);
-        showToast('Shoe successfully added');
-    } catch (err) {
-        handleError(err, "Error while adding the shoe");
-    }
+    await API.post(`${URL}/shoes`, shoe);
 }
 
 export const deleteShoe = async (shoeId) => {
-    try {
-        await axios.delete(`${URL}/shoes/${shoeId}`);
-        showToast('Shoe successfully deleted');
-    } catch (err) {
-        handleError(err, "Error while deleting the shoe");
-    }
+    await API.delete(`${URL}/shoes/${shoeId}`);
+}
+
+export const registerUser = async (userData) => {
+    const res = await API.post(`${URL}/auth/register`, userData);
+    return res.data.user;
+
+}
+
+export const loginUser = async (email, password) => {
+    const res = await API.post(`${URL}/auth/login`, { email, password });
+    return res.data.user;
+
+}
+
+export const logoutUser = async () => {
+    await API.put(`${URL}/auth/logout`);
+}
+
+export const getUser = async () => {
+    const res = await API.get(`${URL}/auth/currentUser`);
+    return res.data.data;
+
 }

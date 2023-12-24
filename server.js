@@ -5,9 +5,12 @@ const cors = require('cors');
 const colors = require('colors');
 const errorHandler = require('./middleware/error');
 const connectDB = require('./config/db')
+const cookieParser = require('cookie-parser');
 
 // Route files
 const shoes = require('./routes/shoes');
+const auth = require('./routes/auth');
+
 // env vars
 dotenv.config({ path: './config/config.env' });
 
@@ -15,7 +18,15 @@ dotenv.config({ path: './config/config.env' });
 connectDB();
 
 const app = express();
-app.use(cors());
+const corsOptions = {
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
+};
+
+app.use(cors(corsOptions));
+
+app.use(cookieParser());
+
 // Body parser
 app.use(express.json());
 
@@ -26,6 +37,7 @@ if (process.env.NODE_ENV = 'development') {
 
 // Mount routers
 app.use('/api/v1/shoes', shoes);
+app.use('/api/v1/auth', auth);
 
 app.use(errorHandler);
 

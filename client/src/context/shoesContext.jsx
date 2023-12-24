@@ -1,13 +1,12 @@
 import { createContext, useEffect, useState } from "react";
 import { createShoe, deleteShoe, getAllShoes, getShoe, updateShoe } from "../api/api.js"
-import { handleError } from "../utils/index.js";
+import { handleError, showToast } from "../utils/index.js";
 export const AppShoesContext = createContext();
 
 export const AppShoesProvider = ({ children }) => {
 
     const [shoes, setShoes] = useState([]);
     const [shoe, setShoe] = useState({});
-
     const [isLoading, setIsLoading] = useState(true);
 
     const fetchShoes = async () => {
@@ -34,17 +33,31 @@ export const AppShoesProvider = ({ children }) => {
     }
 
     const handleShoeEdit = async (shoe, shoeId) => {
-        await updateShoe(shoe, shoeId);
-        fetchShoes();
+        try {
+            await updateShoe(shoe, shoeId);
+            showToast('Shoe successfully updated');
+            fetchShoes();
+        } catch (err) {
+            handleError(err, "Error while updating the shoe");
+        }
     };
     const handleShoeDeletion = async (shoeId) => {
-        await deleteShoe(shoeId);
-        fetchShoes();
-
+        try {
+            await deleteShoe(shoeId);
+            showToast('Shoe successfully deleted');
+            fetchShoes();
+        } catch (err) {
+            handleError(err, "Error while deleting the shoe");
+        }
     };
     const handleShoeAddition = async (shoe) => {
-        await createShoe(shoe);
-        fetchShoes();
+        try {
+            await createShoe(shoe);
+            showToast('Shoe successfully added');
+            fetchShoes();
+        } catch (err) {
+            handleError(err, "Error while adding the shoe");
+        }
     };
 
     return (
@@ -53,6 +66,7 @@ export const AppShoesProvider = ({ children }) => {
                 isLoading,
                 shoes,
                 shoe,
+                setShoe,
                 fetchShoes,
                 getShoe,
                 fetchShoe,

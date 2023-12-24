@@ -30,7 +30,7 @@ const Product = () => {
                 <h2 className='shoe-brand'>{shoe.brand}</h2>
                 <img className='shoe-img' src={shoe.image} alt='shoe-img' />
                 <h2 className='shoe-price'>{`${shoe.price}$`}</h2>
-                {user && user.isAdmin && (
+                {user && user.role === "admin" && (
                     <>
                         <Link to={`/products/${shoe._id}/edit`} className="btn">Edit</Link>
                         <button onClick={handleDelete} className="btn">Delete</button>

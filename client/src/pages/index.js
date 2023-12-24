@@ -3,6 +3,8 @@ import AddProduct from './AddProduct';
 import Product from './Product';
 import EditProduct from './EditProduct';
 import NotFound from './NotFound';
+import LogIn from './LogIn';
+import Register from './Register';
 
 export {
     Home,
@@ -10,4 +12,6 @@ export {
     Product,
     EditProduct,
     NotFound,
+    LogIn,
+    Register
 }

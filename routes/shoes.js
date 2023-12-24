@@ -7,16 +7,17 @@ const { getShoes,
 } = require('../controllers/shoes');
 
 const router = express.Router();
+const { authorize, protect } = require('../middleware/auth');
 
 router
     .route('/')
     .get(getShoes)
-    .post(createShoe);
+    .post(protect, authorize("admin"), createShoe);
 
 router
     .route('/:id')
     .get(getShoe)
-    .put(updateShoe)
-    .delete(deleteShoe);
+    .put(protect, authorize('admin'), updateShoe)
+    .delete(protect, authorize('admin'), deleteShoe);
 
 module.exports = router;
